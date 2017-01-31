@@ -1,0 +1,7 @@
+{
+  "name": "Musician CMS",
+  "description": "Reactjs app for musician dates",
+  "repository": "https://github.com/benrondeau/musician-cms-reactjs",
+  "keywords": ["node", "express", "react"],
+  "image": "heroku/nodejs"
+}

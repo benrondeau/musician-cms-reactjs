@@ -1,0 +1,4 @@
+// See setup instructions @ https://www.npmjs.com/package/eslint-config-airbnb-base
+{
+  "extends": "airbnb"
+}

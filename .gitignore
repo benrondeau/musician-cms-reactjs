@@ -1,0 +1,16 @@
+# IntelliJ
+.idea
+
+# Node
+node_modules
+.npm
+npm-debug.log*
+
+# JS
+.eslintcache
+
+#File System
+.DS_Store
+.env
+log
+*.log

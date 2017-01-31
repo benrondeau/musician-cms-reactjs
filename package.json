@@ -1,0 +1,28 @@
+{
+  "name": "musician-cms-reactjs",
+  "version": "1.0.0",
+  "description": "A basic CMS system for musicians using ReactJS and Node.js backend and SQL database.",
+  "main": "server.js",
+  "engines": {
+    "node": "7.0"
+  },
+  "scripts": {
+    "test": "npm test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benrondeau/musician-cms-reactjs.git"
+  },
+  "author": "Ben Rondeau",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/benrondeau/musician-cms-reactjs/issues"
+  },
+  "homepage": "https://github.com/benrondeau/musician-cms-reactjs#readme",
+  "devDependencies": {
+    "eslint": "^3.14.1",
+    "eslint-config-airbnb-base": "^11.0.1",
+    "eslint-plugin-import": "^2.2.0"
+  }
+}
