@@ -1,5 +1,9 @@
 const mysql = require('mysql');
-require('dotenv').config(); // read local environment variables in development
+const env = require('dotenv');
+
+if (process.env.CLEARDB_DATABASE_URL === undefined) {
+  env.config(); // load .env file into environment in development
+}
 
 const connection = mysql.createConnection(process.env.CLEARDB_DATABASE_URL);
 

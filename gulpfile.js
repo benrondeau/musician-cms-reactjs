@@ -29,7 +29,7 @@ gulp.task('sass', () => gulp.src('public/css/sass/**/*.scss')
 
 
 // Lint All JS Files
-gulp.task('eslint', () => gulp.src(['public/**/*.js', 'server.js', '!node_modules/**'])
+gulp.task('eslint', () => gulp.src(['public/**/*.js', 'server.js', 'server/**/*.js', '!node_modules/**'])
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failAfterError()));
