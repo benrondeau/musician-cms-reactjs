@@ -2,4 +2,5 @@
 
 A basic CMS system for musicians using ReactJS and Node.js backend and SQL database.
 
-More info to come...
+### Local Development
+1. Create .env file and define value for CLEARDB_DATABASE_URL.
