@@ -19,13 +19,13 @@ module.exports = {
     });
   },
   createNewTable() {
-    connection.query('CREATE TABLE `musician1` (`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`event_title`' +
-      ' text,`start_date` date DEFAULT NULL,`end_date` date DEFAULT NULL,`category` text,`description` text,`featured_flag` tinyint(1) DEFAULT NULL,`created_at` timestamp NULL DEFAULT NULL,`updated_at` timestamp NULL DEFAULT NULL,PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;',
-      (error, results, fields) => {
+    connection.query('CREATE TABLE `musician1` (`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`event_title` text,`start_date` date DEFAULT NULL,`end_date` date DEFAULT NULL,`category` text,`description` text,`featured_flag` tinyint(1) DEFAULT NULL,`created_at` timestamp NULL DEFAULT NULL,`updated_at` timestamp NULL DEFAULT NULL,PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;',
+      (error) => {
         if (error) {
           console.log(error);
+          return;
         }
-        console.log(results, fields);
+        console.log('Success creating new database table!');
       });
   },
 };
