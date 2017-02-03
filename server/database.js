@@ -1,8 +1,8 @@
 const mysql = require('mysql'); // Docs @ https://www.npmjs.com/package/mysql
-const env = require('dotenv');
 
 if (process.env.CLEARDB_DATABASE_URL === undefined) {
-  env.config(); // load .env file into environment in development
+  /* eslint global-require: "off", import/no-extraneous-dependencies: "off" */
+  require('dotenv').config(); // load .env file into environment in development
 }
 
 const connection = mysql.createConnection(process.env.CLEARDB_DATABASE_URL);
@@ -31,7 +31,7 @@ module.exports = {
 
   // Create a Table
   createNewTable() {
-    connection.query('CREATE TABLE `musician1` (`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`event_title` text,`start_date` date DEFAULT NULL,`end_date` date DEFAULT NULL,`category` text,`description` text,`featured_flag` tinyint(1) DEFAULT NULL,`created_at` timestamp NULL DEFAULT NULL,`updated_at` timestamp NULL DEFAULT NULL,PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;',
+    connection.query('CREATE TABLE IF NOT EXISTS `music_events` (`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`event_title` text,`start_date` date DEFAULT NULL,`end_date` date DEFAULT NULL,`category` text,`description` text,`featured_flag` tinyint(1) DEFAULT NULL,`created_at` timestamp NULL DEFAULT NULL,`updated_at` timestamp NULL DEFAULT NULL,PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;',
       (error) => {
         if (error) {
           console.log(error);
@@ -43,7 +43,7 @@ module.exports = {
 
   // Retrieve entire contents of DB to cache in memory
   getDBcontents() {
-    connection.query('SELECT * FROM test1',
+    connection.query('SELECT * FROM music_events',
       (error, results) => {
         if (error) {
           console.log(error);
@@ -54,15 +54,34 @@ module.exports = {
       });
   },
 
+  readDB(params) {
+    // build query
+    connection.query(`SELECT * FROM music_events WHERE event_title = ${connection.escape('SXSW')}`,
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          return;
+        }
+        console.log(`${results.length} event(s) retrieved.`);
+        console.log(results);
+        res.json(mysql.readDB());
+      });
+  },
+
   // Variable to stored events.
   allEvents: undefined,
 };
 
-/* TODO
- ✓ Method to retrieve all records from a table
-- Method to retieve records based on:
-  - event_title
-  - date
+// GET TIMESTAMP new Date().toISOString()
 
+/* TODO
+ ✓ Methods to create:
+  - return all events
+  - return event by:
+    - event title
+    - date range
+    - category
+    - description
+    - featured flag
 */
 
