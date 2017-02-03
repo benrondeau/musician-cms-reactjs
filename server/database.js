@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+const mysql = require('mysql'); // Docs @ https://www.npmjs.com/package/mysql
 const env = require('dotenv');
 
 if (process.env.CLEARDB_DATABASE_URL === undefined) {
@@ -15,7 +15,17 @@ module.exports = {
         console.error(`MySQL error connecting: ${err.stack}`);
         return;
       }
-      console.log('Connection to MySQL DB successful');
+      console.log('Connection to MySQL DB successful!');
     });
+  },
+  createNewTable() {
+    connection.query('CREATE TABLE `musician1` (`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`event_title`' +
+      ' text,`start_date` date DEFAULT NULL,`end_date` date DEFAULT NULL,`category` text,`description` text,`featured_flag` tinyint(1) DEFAULT NULL,`created_at` timestamp NULL DEFAULT NULL,`updated_at` timestamp NULL DEFAULT NULL,PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;',
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+        }
+        console.log(results, fields);
+      });
   },
 };
