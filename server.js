@@ -2,7 +2,7 @@ const express = require('express');
 const mysql = require('./server/database');
 
 // Database
-mysql.connect();
+mysql.getDBcontents(); // retrieve and cache music events in memory.
 
 // Express Config
 const app = express();
