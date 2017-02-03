@@ -43,3 +43,7 @@ gulp.task('html', () => {
   gulp.src('public/**/*.html')
     .pipe(gulp.dest('dist/'));
 });
+
+gulp.task('test', () => {
+  console.log('test goes here...');
+});

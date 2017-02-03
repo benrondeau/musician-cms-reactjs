@@ -17,7 +17,20 @@ A simple web app for tracking live music events using React, Node.js and MySQL d
 
 
 ### API Documentation
-TBD
+Document API like: https://developer.github.com/v3/issues/#list-issues
+This API only accepts parameters in the HTTP query string format. Example:
+`api/event/?name=bonaroo`
+
+Responses will be sent in the JSON format. Example:
+
+`TBD`
+
+API Methods:
+
+GET `/api/event?params`
+
+Params: `TBD`
+
 
 ### Security Features
 - SSL encryption on domain

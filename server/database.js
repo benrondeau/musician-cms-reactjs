@@ -35,11 +35,9 @@ module.exports = {
       (error) => {
         if (error) {
           console.log(error);
-          this.disconnect();
           return;
         }
         console.log('Success creating new database table!');
-        this.disconnect();
       });
   },
 
@@ -49,12 +47,10 @@ module.exports = {
       (error, results) => {
         if (error) {
           console.log(error);
-          this.disconnect();
           return;
         }
         console.log(`${results.length} event(s) retrieved.`);
         this.allEvents = results;
-        this.disconnect(); // TODO this isn't working. Fix it
       });
   },
 
