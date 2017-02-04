@@ -12,8 +12,9 @@ A web app for tracking music events (concerts, festivals, etc.) using React, Nod
 
 1. Clone repo to your machine.
 2. `cd` into root of repo, run `npm install`
-3. Create `.env` file in root folder and define value for `CLEARDB_DATABASE_URL`.
+3. Create `.env` file in root folder and define value for `CLEARDB_DATABASE_URL`, which just needs to be a valid `mysql://` connection to a MySQL
 4. Run `npm start` to boot up server. View server console output for any errors.
+<!-- 5. TODO add info on how to create a dummy DB -->
 
 To run tests: `npm test`
 
@@ -44,13 +45,13 @@ This API only accepts parameters in the HTTP query string format. Example: `?nam
  ]
  ```
 
-**Default:** If no parameters passed, API returns all events.
+**Required Parameters:** None. If no parameters passed, API returns all events.
 
-**Parameters:**
+**Optional Parameters (query string form):**
 
 | Name        | Type         | Usage | Description  |
 |:------------- |:-------------|:-----|:-----|
-| `id` | string | Optional | ID # for event |
+| `id` | integer | Optional | ID # for event |
 | `event_title` | string | Optional | Title of event |
 | `category` | string | Optional | Event's category, only 1 category per event |
 | `description` | string | Optional | Description of event. |
@@ -58,51 +59,51 @@ This API only accepts parameters in the HTTP query string format. Example: `?nam
 
 
 
-#### POST `/api/event/create`
+#### POST `/api/event/:id`
 
 **Function:** Create new event.
 
 **Response:** Successful creation returns `Status: 200 OK`
 
-**Parameters:**
+**Required Parameters:** `id`, passed as integer
 
-| Name        | Type         | Usage | Description  |
-|:------------- |:-------------|:-----|:-----|
-| `event_title` | string | **REQUIRED** | Title of event. |
-| `category` | string | Optional | Event's category |
-| `description` | string | Optional | Description of event. |
-| `featured_flag` | boolean | Optional | Must be in 'true' or 'false' format. |
-| `start_date` | string | Optional | Must be in YYYY-DD-MM format. Start date of event. |
-| `end_date` | string | Optional | Must be in YYYY-DD-MM format. End date of event. |
+**Optional Parameters (query string form):**
 
-#### POST `/api/event/update`
+| Name        | Type         | Description  |
+|:------------- |:-------------|:-----|
+| `event_title` | string | Title of event. |
+| `category` | string | Event's category |
+| `description` | string | Description of event. |
+| `featured_flag` | boolean | Must be in 'true' or 'false' format. |
+| `start_date` | integer | Must be in YYYY-DD-MM format. Start date of event. |
+| `end_date` | integer | Must be in YYYY-DD-MM format. End date of event. |
+
+#### PUT `/api/event/:id`
 
 **Function:** Update existing event.
 
 **Response:** Successful creation returns `Status: 200 OK`
 
-**Parameters:**
+**Required Parameters:** `id`, passed as integer
 
-| Name        | Type         | Usage | Description  |
-|:------------- |:-------------|:-----|:-----|
-| `id` | string | **REQUIRED** | ID# for event. |
-| `event_title` | string | Optional | Title of event. |
-| `category` | string | Optional | Event's category |
-| `description` | string | Optional | Description of event. |
-| `featured_flag` | boolean | Optional | Must be in 'true' or 'false' format. |
-| `start_date` | string | Optional | Must be in YYYY-DD-MM format. Start date of event. |
-| `end_date` | string | Optional | Must be in YYYY-DD-MM format. End date of event. |
+**Optional Parameters (query string form):**
 
-#### POST `/api/event/delete`
+| Name        | Type         | Description  |
+|:------------- |:-------------|:-----|
+| `event_title` | string | Title of event. |
+| `category` | string | Event's category |
+| `description` | string | Description of event. |
+| `featured_flag` | boolean | Must be in 'true' or 'false' format. |
+| `start_date` | integer | Must be in YYYY-DD-MM format. Start date of event. |
+| `end_date` | integer | Must be in YYYY-DD-MM format. End date of event. |
+
+#### POST `/api/event/:id`
 
 **Function:** Delete existing event.
 
 **Response:** Successful deletion returns `Status: 200 OK`
 
-**Parameters:**
+**Required Parameters (query string form):** `id`, passed as integer
 
-| Name        | Type         | Usage | Description  |
-|:------------- |:-------------|:-----|:-----|
-| `id` | string | **REQUIRED** | ID# for event. |
 Any other parameters passed are ignored.
 

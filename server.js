@@ -21,7 +21,7 @@ app.listen(app.get('port'), () => {
   console.log('Node server is running on port', app.get('port'));
 });
 
-// Retrieve Events
+// API
 app.get('/api/event', (req, res) => {
   // storage for query parameters
   const queryObject = {};
@@ -85,25 +85,24 @@ app.get('/api/event', (req, res) => {
   }
 });
 
-// Create Events
-app.post('/api/event/create', (req, res) => {
+app.route('/api/event/:id')
+  .post((req, res) => {
   // storage for query parameters
   // TODO verify all these column names
-  const queryObject = {
-    event_title: '',
-    category: null,
-    description: null,
-    featured_flag: false,
-    start_date: null,
-    end_date: null,
-    created_at: '', // TODO insert proper timestamp
-    updated_at: '', // TODO insert proper timestamp
-  };
-  // STEP 1: Check for required 'id' field
-  if (req.query.id === undefined) {
-    // Get entire table record
-    res.status(400).json({ error: 'No "id" parameter present. This is required' });
-  } else {
+    const queryObject = {
+      event_title: '',
+      category: null,
+      description: null,
+      featured_flag: false,
+      start_date: null,
+      end_date: null,
+      created_at: '', // TODO insert proper timestamp WITH TIME in addition to date
+      updated_at: '', // TODO insert proper timestamp WITH TIME in addition to date
+    };
+    // STEP 1: Check for required 'id' field
+    if (req.params.id === undefined) {
+      res.status(400).json({ error: 'No "id" parameter present. This is required' });
+    } else {
     // STEP 2: Add optional each parameter in query string
     for (const key in req.query) { // eslint-disable-line
       switch (key) {
@@ -152,20 +151,17 @@ app.post('/api/event/create', (req, res) => {
         }
       });
     }
-  }
-});
-
-// Update Events
-app.post('/api/event/update', (req, res) => {
+    }
+  })
+  .put((req, res) => {
   // storage for query parameters
-  const queryObject = {
-    updated_at: '', // TODO insert proper timestamp
-  };
+    const queryObject = {
+      updated_at: '', // TODO insert proper timestamp
+    };
   // STEP 1: Check for required 'id' field
-  if (req.query.event_title === undefined) {
-    // Get entire table record
-    res.status(400).json({ error: 'No "event_title" parameter present. This is required' });
-  } else {
+    if (req.params.id === undefined) {
+      res.status(400).json({ error: 'No "id" parameter present. This is required' });
+    } else {
     // STEP 2: Add optional each parameter in query string
     for (const key in req.query) { // eslint-disable-line
       switch (key) {
@@ -214,17 +210,15 @@ app.post('/api/event/update', (req, res) => {
         }
       });
     }
-  }
-});
-
-// Delete Events
-app.post('/api/event/delete', (req, res) => {
+    }
+  })
+  .delete((req, res) => {
   // STEP 1: Check for presence of parameters
-  if (req.query.id === undefined) {
-    res.status(400).json({ error: 'No "id" parameter present. This is required' });
-  } else {
+    if (req.params.id === undefined) {
+      res.status(400).json({ error: 'No "id" parameter present. This is required' });
+    } else {
     // STEP 2: Delete entry
-    knex.select() // return all columns from matching rows
+      knex.select() // return all columns from matching rows
     // TODO insert delete query here.
       .then((results) => {
         res.json(results);
@@ -233,5 +227,5 @@ app.post('/api/event/delete', (req, res) => {
         console.log(error);
         res.status(500).json(error);
       });
-  }
-});
+    }
+  });

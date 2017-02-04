@@ -1,6 +1,5 @@
 const assert = require('assert');
 const http = require('http');
-const shell = require('shelljs');
 
 /* global describe, it, before  */
 describe('API Test Suite', () => {
