@@ -41,7 +41,7 @@ app.get('/api/event', (req, res) => {
       for (const key in req.query) { // eslint-disable-line
         switch (key) {
           case 'id':
-            req.checkBody('id', '"id" parameter must be numbers only.').isInteger(req.query[key]);
+            req.checkQuery('id', '"id" parameter must be numbers only.').isNumber(req.query[key]);
             queryObject[key] = req.query[key];
             break;
           case 'event_title':
@@ -54,12 +54,14 @@ app.get('/api/event', (req, res) => {
             queryObject[key] = req.query[key];
             break;
           case 'featured_flag':
-            req.checkBody('featured_flag', '"featured_flag" parameter must be in boolean format.').isBoolean(req.query[key]);
+            req.checkQuery('featured_flag', '"featured_flag" parameter must be in boolean format.').isBoolean(req.query[key]);
             queryObject[key] = req.query[key];
             break;
           default:
             // Malformed parameter detected!
-            req.checkBody(queryObject[key], `"${queryObject[key]}" is not a valid parameter.`).isBoolean(null);// This will fail.
+            req.checkQuery(queryObject[key], `"${queryObject[key]}" is not a valid parameter.`).isBoolean(null);// This
+          // will
+          // fail.
         }
         // STEP 3: Results of validation
         req.getValidationResult().then((result) => {
@@ -112,23 +114,25 @@ app.post('/api/event/create', (req, res) => {
           queryObject[key] = req.query[key];
           break;
         case 'start_date':
-          req.checkBody('start_date', '"start_date" parameter must be in date format.').isDate(req.query[key]);
+          req.checkQuery('start_date', '"start_date" parameter must be in date format.').isDate(req.query[key]);
           queryObject[key] = req.query[key];
           break;
         case 'end_date':
-          req.checkBody('end_date', '"end_date" parameter must be in date format.').isDate(req.query[key]);
+          req.checkQuery('end_date', '"end_date" parameter must be in date format.').isDate(req.query[key]);
           queryObject[key] = req.query[key];
           break;
         case 'description':
           queryObject[key] = req.query[key];
           break;
         case 'featured_flag':
-          req.checkBody('featured_flag', '"featured_flag" parameter must be in boolean format.').isBoolean(req.query[key]);
+          req.checkQuery('featured_flag', '"featured_flag" parameter must be in boolean format.').isBoolean(req.query[key]);
           queryObject[key] = req.query[key];
           break;
         default:
           // Malformed parameter detected!
-          req.checkBody(queryObject[key], `"${queryObject[key]}" is not a valid parameter.`).isBoolean(null);// This will fail.
+          req.checkQuery(queryObject[key], `"${queryObject[key]}" is not a valid parameter.`).isBoolean(null);// This
+        // will
+        // fail.
       }
       // STEP 3: Results of validation
       req.getValidationResult().then((result) => {
@@ -172,23 +176,25 @@ app.post('/api/event/update', (req, res) => {
           queryObject[key] = req.query[key];
           break;
         case 'start_date':
-          req.checkBody('start_date', '"start_date" parameter must be in date format.').isDate(req.query[key]);
+          req.checkQuery('start_date', '"start_date" parameter must be in date format.').isDate(req.query[key]);
           queryObject[key] = req.query[key];
           break;
         case 'end_date':
-          req.checkBody('end_date', '"end_date" parameter must be in date format.').isDate(req.query[key]);
+          req.checkQuery('end_date', '"end_date" parameter must be in date format.').isDate(req.query[key]);
           queryObject[key] = req.query[key];
           break;
         case 'description':
           queryObject[key] = req.query[key];
           break;
         case 'featured_flag':
-          req.checkBody('featured_flag', '"featured_flag" parameter must be in boolean format.').isBoolean(req.query[key]);
+          req.checkQuery('featured_flag', '"featured_flag" parameter must be in boolean format.').isBoolean(req.query[key]);
           queryObject[key] = req.query[key];
           break;
         default:
           // Malformed parameter detected!
-          req.checkBody(queryObject[key], `"${queryObject[key]}" is not a valid parameter.`).isBoolean(null);// This will fail.
+          req.checkQuery(queryObject[key], `"${queryObject[key]}" is not a valid parameter.`).isBoolean(null);// This
+        // will
+        // fail.
       }
       // STEP 3: Results of validation
       req.getValidationResult().then((result) => {
