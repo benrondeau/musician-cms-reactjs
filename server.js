@@ -138,9 +138,9 @@ app.route('/api/event/:id')
         if (!result) {
           res.status(400).json({ error: result });
         } else {
-          // Execute search query
-          knex.select() // return all columns from matching rows
-            // TODO add proper insert query
+          // Execute insert query
+          knex('music_events')
+            .insert(queryObject)
             .then((results) => {
               res.json(results);
             })
@@ -197,9 +197,10 @@ app.route('/api/event/:id')
         if (!result) {
           res.status(400).json({ error: result });
         } else {
-          // Execute search query
-          knex.select() // return all columns from matching rows
-          // TODO add proper update query
+          // Execute update query
+          knex('music_events')
+            .where('id', req.params.id)
+            .update(queryObject)
             .then((results) => {
               res.json(results);
             })
@@ -217,9 +218,10 @@ app.route('/api/event/:id')
     if (req.params.id === undefined) {
       res.status(400).json({ error: 'No "id" parameter present. This is required' });
     } else {
-    // STEP 2: Delete entry
-      knex.select() // return all columns from matching rows
-    // TODO insert delete query here.
+    // STEP 2: Delete entry matching id
+      knex('music_events')
+      .where('id', req.params.id)
+      .del()
       .then((results) => {
         res.json(results);
       })
