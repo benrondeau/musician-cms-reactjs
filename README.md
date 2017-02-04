@@ -44,7 +44,7 @@ This API only accepts parameters in the HTTP query string format. Example: `?nam
  ]
  ```
 
-Default: If no parameters passed, API returns all events.
+**Default:** If no parameters passed, API returns all events.
 
 **Parameters:**
 
@@ -73,7 +73,7 @@ Default: If no parameters passed, API returns all events.
 | `description` | string | Optional | Description of event. |
 | `featured_flag` | boolean | Optional | Must be in 'true' or 'false' format. |
 | `start_date` | string | Optional | Must be in YYYY-DD-MM format. Start date of event. |
-| `description` | string | Optional | Must be in YYYY-DD-MM format. End date of event. |
+| `end_date` | string | Optional | Must be in YYYY-DD-MM format. End date of event. |
 
 #### POST `/api/event/update`
 
@@ -83,11 +83,26 @@ Default: If no parameters passed, API returns all events.
 
 **Parameters:**
 
-| Name        | Type         | Description  |
-|:------------- |:-------------|:-----|
-| `event_title` | string | Required. Title of event. |
-| `category` | string | Optional. Event's category |
-| `description` | string | Optional. Description of event. |
-| `featured_flag` | boolean | Optional. Must be in 'true' or 'false' format. |
-| `start_date` | string | Optional. Must be in YYYY-DD-MM format. Start date of event. |
-| `description` | string | Optional. Must be in YYYY-DD-MM format. End date of event. |
+| Name        | Type         | Usage | Description  |
+|:------------- |:-------------|:-----|:-----|
+| `id` | string | **REQUIRED** | ID# for event. |
+| `event_title` | string | Optional | Title of event. |
+| `category` | string | Optional | Event's category |
+| `description` | string | Optional | Description of event. |
+| `featured_flag` | boolean | Optional | Must be in 'true' or 'false' format. |
+| `start_date` | string | Optional | Must be in YYYY-DD-MM format. Start date of event. |
+| `end_date` | string | Optional | Must be in YYYY-DD-MM format. End date of event. |
+
+#### POST `/api/event/delete`
+
+**Function:** Delete existing event.
+
+**Response:** Successful deletion returns `Status: 200 OK`
+
+**Parameters:**
+
+| Name        | Type         | Usage | Description  |
+|:------------- |:-------------|:-----|:-----|
+| `id` | string | **REQUIRED** | ID# for event. |
+Any other parameters passed are ignored.
+

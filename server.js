@@ -20,9 +20,8 @@ app.set('port', (process.env.PORT || 5000));
 app.listen(app.get('port'), () => {
   console.log('Node server is running on port', app.get('port'));
 });
-module.exports.expressServer = app; // expose express server to mocha testing
 
-// API
+// Retrieve Events
 app.get('/api/event', (req, res) => {
   // storage for query parameters
   const queryObject = {};
@@ -84,9 +83,10 @@ app.get('/api/event', (req, res) => {
   }
 });
 
+// Create Events
 app.post('/api/event/create', (req, res) => {
-    // storage for query parameters
-    // TODO verify all these column names
+  // storage for query parameters
+  // TODO verify all these column names
   const queryObject = {
     event_title: '',
     category: null,
@@ -97,7 +97,12 @@ app.post('/api/event/create', (req, res) => {
     created_at: '', // TODO insert proper timestamp
     updated_at: '', // TODO insert proper timestamp
   };
-    // Execute query
+  // STEP 1: Check for required 'id' field
+  if (req.query.id === undefined) {
+    // Get entire table record
+    res.status(400).json({ error: 'No "id" parameter present. This is required' });
+  } else {
+    // STEP 2: Add optional each parameter in query string
     for (const key in req.query) { // eslint-disable-line
       switch (key) {
         case 'event_title':
@@ -106,41 +111,121 @@ app.post('/api/event/create', (req, res) => {
         case 'category':
           queryObject[key] = req.query[key];
           break;
-        case 'description':
-          queryObject[key] = req.query[key];
-          break;
         case 'start_date':
+          req.checkBody('start_date', '"start_date" parameter must be in date format.').isDate(req.query[key]);
           queryObject[key] = req.query[key];
           break;
         case 'end_date':
+          req.checkBody('end_date', '"end_date" parameter must be in date format.').isDate(req.query[key]);
+          queryObject[key] = req.query[key];
+          break;
+        case 'description':
           queryObject[key] = req.query[key];
           break;
         case 'featured_flag':
           req.checkBody('featured_flag', '"featured_flag" parameter must be in boolean format.').isBoolean(req.query[key]);
-          req.getValidationResult().then((result) => {
-            if (!result) {
-              res.status(400).json({ error: result });
-              // TODO break completely out of the for loop
-            } else {
-              queryObject[key] = req.query[key];
-            }
-          });
+          queryObject[key] = req.query[key];
           break;
         default:
-          res.status(400).json({ error: 'Your query string is malformed. Please refer to API documentation to correct this error.' });
+          // Malformed parameter detected!
+          req.checkBody(queryObject[key], `"${queryObject[key]}" is not a valid parameter.`).isBoolean(null);// This will fail.
       }
-      // Execute query
-      knex('music_events')
-        .insert(queryObject)
-        .then((results) => {
-          res.json(results);
-        })
-        .catch((error) => {
-          console.log(error);
-          res.status(500).json(error);
-        });
+      // STEP 3: Results of validation
+      req.getValidationResult().then((result) => {
+        if (!result) {
+          res.status(400).json({ error: result });
+        } else {
+          // Execute search query
+          knex.select() // return all columns from matching rows
+            // TODO add proper insert query
+            .then((results) => {
+              res.json(results);
+            })
+            .catch((error) => {
+              console.log(error);
+              res.status(500).json(error);
+            });
+        }
+      });
     }
+  }
 });
 
-app.post('/api/event/update');
-app.post('/api/event/delete');
+// Update Events
+app.post('/api/event/update', (req, res) => {
+  // storage for query parameters
+  const queryObject = {
+    updated_at: '', // TODO insert proper timestamp
+  };
+  // STEP 1: Check for required 'id' field
+  if (req.query.event_title === undefined) {
+    // Get entire table record
+    res.status(400).json({ error: 'No "event_title" parameter present. This is required' });
+  } else {
+    // STEP 2: Add optional each parameter in query string
+    for (const key in req.query) { // eslint-disable-line
+      switch (key) {
+        case 'event_title':
+          queryObject[key] = req.query[key];
+          break;
+        case 'category':
+          queryObject[key] = req.query[key];
+          break;
+        case 'start_date':
+          req.checkBody('start_date', '"start_date" parameter must be in date format.').isDate(req.query[key]);
+          queryObject[key] = req.query[key];
+          break;
+        case 'end_date':
+          req.checkBody('end_date', '"end_date" parameter must be in date format.').isDate(req.query[key]);
+          queryObject[key] = req.query[key];
+          break;
+        case 'description':
+          queryObject[key] = req.query[key];
+          break;
+        case 'featured_flag':
+          req.checkBody('featured_flag', '"featured_flag" parameter must be in boolean format.').isBoolean(req.query[key]);
+          queryObject[key] = req.query[key];
+          break;
+        default:
+          // Malformed parameter detected!
+          req.checkBody(queryObject[key], `"${queryObject[key]}" is not a valid parameter.`).isBoolean(null);// This will fail.
+      }
+      // STEP 3: Results of validation
+      req.getValidationResult().then((result) => {
+        if (!result) {
+          res.status(400).json({ error: result });
+        } else {
+          // Execute search query
+          knex.select() // return all columns from matching rows
+          // TODO add proper update query
+            .then((results) => {
+              res.json(results);
+            })
+            .catch((error) => {
+              console.log(error);
+              res.status(500).json(error);
+            });
+        }
+      });
+    }
+  }
+});
+
+// Delete Events
+app.post('/api/event/delete', (req, res) => {
+  // STEP 1: Check for presence of parameters
+  if (req.query.id === undefined) {
+    res.status(400).json({ error: 'No "id" parameter present. This is required' });
+  } else {
+    // STEP 2: Delete entry
+    knex.select() // return all columns from matching rows
+    // TODO insert delete query here.
+      .then((results) => {
+        res.json(results);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json(error);
+      });
+  }
+});
