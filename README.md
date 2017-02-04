@@ -54,29 +54,27 @@ This API only accepts parameters in the HTTP query string format. Example: `?nam
 | `id` | integer | Optional | ID # for event |
 | `event_title` | string | Optional | Title of event |
 | `category` | string | Optional | Event's category, only 1 category per event |
-| `description` | string | Optional | Description of event. |
-| `featured_flag` | boolean | Optional | Must be in 'true' or 'false' format. Whether the event is featured or not.|
+| `featured_flag` | intege | Optional | Must be '0' (false) or '1' (true). Whether the event is featured or not.|
 
 
 
-#### POST `/api/event/:id`
+#### POST `/api/event`
 
 **Function:** Create new event.
 
 **Response:** Successful creation returns `Status: 200 OK`
 
-**Required Parameters:** `id`, passed as integer
+**Required Parameters:** `event_title`, passed as `string`
 
 **Optional Parameters (query string form):**
 
 | Name        | Type         | Description  |
 |:------------- |:-------------|:-----|
-| `event_title` | string | Title of event. |
-| `category` | string | Event's category |
 | `description` | string | Description of event. |
-| `featured_flag` | boolean | Must be in 'true' or 'false' format. |
-| `start_date` | integer | Must be in YYYY-DD-MM format. Start date of event. |
-| `end_date` | integer | Must be in YYYY-DD-MM format. End date of event. |
+| `category` | string | Event's category |
+| `featured_flag` | integer | Must be '0' (false) or '1' (true). |
+| `start_date` | integer | Must be in [ISO8601](http://www.iso.org/iso/iso8601) format. Start date of event. |
+| `end_date` | integer | Must be in [ISO8601](http://www.iso.org/iso/iso8601) format. End date of event. |
 
 #### PUT `/api/event/:id`
 
@@ -91,13 +89,13 @@ This API only accepts parameters in the HTTP query string format. Example: `?nam
 | Name        | Type         | Description  |
 |:------------- |:-------------|:-----|
 | `event_title` | string | Title of event. |
-| `category` | string | Event's category |
 | `description` | string | Description of event. |
-| `featured_flag` | boolean | Must be in 'true' or 'false' format. |
-| `start_date` | integer | Must be in YYYY-DD-MM format. Start date of event. |
-| `end_date` | integer | Must be in YYYY-DD-MM format. End date of event. |
+| `category` | string | Event's category |
+| `featured_flag` | integer | Must be '0' (false) or '1' (true). |
+| `start_date` | integer | Must be in [ISO8601](http://www.iso.org/iso/iso8601) format. Start date of event. |
+| `end_date` | integer | Must be in [ISO8601](http://www.iso.org/iso/iso8601) format. End date of event. |
 
-#### POST `/api/event/:id`
+#### DELETE `/api/event/:id`
 
 **Function:** Delete existing event.
 
