@@ -1,14 +1,14 @@
 {
   "name": "musician-cms-reactjs",
   "version": "1.0.0",
-  "description": "A basic CMS system for musicians using ReactJS and Node.js backend and SQL database.",
+  "description": "A web app for tracking music events (concerts, festivals, etc.) using React, Node.js and MySQL database.",
   "main": "server.js",
   "engines": {
     "node": "7.0"
   },
   "scripts": {
-    "test": "gulp test",
-    "start": "node src/server.js"
+    "test": " test/test.js",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -34,11 +34,14 @@
     "gulp-babel": "^6.1.2",
     "gulp-copy": "^1.0.0",
     "gulp-eslint": "^3.0.1",
-    "gulp-sass": "^3.1.0"
+    "gulp-sass": "^3.1.0",
+    "mocha": "^3.2.0",
+    "shelljs": "^0.7.6"
   },
   "dependencies": {
     "compression": "^1.6.2",
     "express": "^4.14.1",
+    "express-validator": "^3.1.2",
     "helmet": "^3.4.0",
     "knex": "^0.12.6",
     "mysql": "^2.13.0"
