@@ -20,8 +20,14 @@ To run tests: `npm test`
 ### API Documentation
 This API only accepts parameters in the HTTP query string format. Example: `?name=bonaroo&category=festival`
 
-Responses will be sent in the JSON format:
 
+#### GET `/api/event`
+
+**Function:** Read events from database.
+
+**Response:** Matching events returned in JSON object:
+
+`Status: 200 OK`
 ```json
 [
      {
@@ -38,14 +44,50 @@ Responses will be sent in the JSON format:
  ]
  ```
 
-**GET `/api/event` Params:**
+Default: If no parameters passed, API returns all events.
+
+**Parameters:**
+
+| Name        | Type         | Usage | Description  |
+|:------------- |:-------------|:-----|:-----|
+| `id` | string | Optional | ID # for event |
+| `event_title` | string | Optional | Title of event |
+| `category` | string | Optional | Event's category, only 1 category per event |
+| `description` | string | Optional | Description of event. |
+| `featured_flag` | boolean | Optional | Must be in 'true' or 'false' format. Whether the event is featured or not.|
+
+
+
+#### POST `/api/event/create`
+
+**Function:** Create new event.
+
+**Response:** Successful creation returns `Status: 200 OK`
+
+**Parameters:**
+
+| Name        | Type         | Usage | Description  |
+|:------------- |:-------------|:-----|:-----|
+| `event_title` | string | **REQUIRED** | Title of event. |
+| `category` | string | Optional | Event's category |
+| `description` | string | Optional | Description of event. |
+| `featured_flag` | boolean | Optional | Must be in 'true' or 'false' format. |
+| `start_date` | string | Optional | Must be in YYYY-DD-MM format. Start date of event. |
+| `description` | string | Optional | Must be in YYYY-DD-MM format. End date of event. |
+
+#### POST `/api/event/update`
+
+**Function:** Update existing event.
+
+**Response:** Successful creation returns `Status: 200 OK`
+
+**Parameters:**
 
 | Name        | Type         | Description  |
 |:------------- |:-------------|:-----|
-| `id` | string | Returns event matching id # |
-| `event_title` | string | Returns events matching to string |
-| `start_date` | string | Must be in YYYY-MM-DD format. Returns events matching to string |
-| `end_date` | string | Must be in YYYY-MM-DD format. Returns events matching to string |
-| `category` | string | Returns events with matching category |
-| `description` | string | returns events matching to string |
-| `featured_flag` | boolean | Must be in 'true' or 'false' format. Returns featured events |
+| `event_title` | string | Required. Title of event. |
+| `category` | string | Optional. Event's category |
+| `description` | string | Optional. Description of event. |
+| `featured_flag` | boolean | Optional. Must be in 'true' or 'false' format. |
+| `start_date` | string | Optional. Must be in YYYY-DD-MM format. Start date of event. |
+| `description` | string | Optional. Must be in YYYY-DD-MM format. End date of event. |

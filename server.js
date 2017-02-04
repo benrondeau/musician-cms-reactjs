@@ -2,7 +2,7 @@ const express = require('express');
 const helmet = require('helmet'); // set security-related HTTP headers
 const compression = require('compression'); // gzip responses, speed things up
 const expressValidator = require('express-validator');
-const mysql = require('mysql');
+const mysql = require('mysql'); // eslint-disable-line
 
 if (process.env.CLEARDB_DATABASE_URL === undefined) {
   require('dotenv').config(); // eslint-disable-line
@@ -23,14 +23,13 @@ app.listen(app.get('port'), () => {
 module.exports.expressServer = app; // expose express server to mocha testing
 
 // API
-app.route('/api/event')
-  .get((req, res) => {
-    // storage for query parameters
-    const queryObject = {};
-    // Check for presence of parameters
-    if (Object.keys(req.query).length === 0 && req.query.constructor === Object) {
-      // Get entire table record
-      knex.select().from('music_events')
+app.get('/api/event', (req, res) => {
+  // storage for query parameters
+  const queryObject = {};
+  // STEP 1: Check for presence of parameters
+  if (Object.keys(req.query).length === 0 && req.query.constructor === Object) {
+    // Get entire table record
+    knex.select().from('music_events')
         .then((results) => {
           res.json(results);
         })
@@ -38,36 +37,16 @@ app.route('/api/event')
           console.log(error);
           res.status(500).json(error);
         });
-    } else {
-      // Process each parameter in query string
+  } else {
+      // STEP 2: Process each parameter in query string
       for (const key in req.query) { // eslint-disable-line
         switch (key) {
-          case 'event_title':
+          case 'id':
+            req.checkBody('id', '"id" parameter must be numbers only.').isInteger(req.query[key]);
             queryObject[key] = req.query[key];
             break;
-          case 'start_date':
-            req.checkBody('start_date', '"start_date" parameter must be in a date format.').isDate(req.query[key]);
-            req.getValidationResult().then((result) => {
-              if (!result) {
-                res.status(400).json({ error: result });
-                // TODO break completely out of the for loop
-              } else {
-                // TODO how to handle date searches?
-                // queryObject[key] = req.query[key];
-              }
-            });
-            break;
-          case 'end_date':
-            req.checkBody('end_date', '"end_date" parameter must be in a date format.').isDate(req.query[key]);
-            req.getValidationResult().then((result) => {
-              if (!result) {
-                res.status(400).json({ error: result });
-                // TODO break completely out of the for loop
-              } else {
-                // TODO how to handle date searches?
-                // queryObject[key] = req.query[key];
-              }
-            });
+          case 'event_title':
+            queryObject[key] = req.query[key];
             break;
           case 'category':
             queryObject[key] = req.query[key];
@@ -77,63 +56,91 @@ app.route('/api/event')
             break;
           case 'featured_flag':
             req.checkBody('featured_flag', '"featured_flag" parameter must be in boolean format.').isBoolean(req.query[key]);
-            req.getValidationResult().then((result) => {
-              if (!result) {
-                res.status(400).json({ error: result });
-                // TODO break completely out of the for loop
-              } else {
-                queryObject[key] = req.query[key];
-              }
-            });
+            queryObject[key] = req.query[key];
             break;
           default:
-            res.status(400).json({ error: `Your query string is malformed (${key}). Please refer to API documentation to correct this error.` });
+            // Malformed parameter detected!
+            req.checkBody(queryObject[key], `"${queryObject[key]}" is not a valid parameter.`).isBoolean(null);// This will fail.
         }
-        // Execute query
-        knex.select() // return all columns from matching rows
-          .from('music_events') // from this table
-          .where(queryObject)
-          .then((results) => {
-            res.json(results);
-          })
-          .catch((error) => {
-            console.log(error);
-            res.status(500).json(error);
-          });
+        // STEP 3: Results of validation
+        req.getValidationResult().then((result) => {
+          if (!result) {
+            res.status(400).json({ error: result });
+          } else {
+            // Execute search query
+            knex.select() // return all columns from matching rows
+              .from('music_events') // from this table
+              .where(queryObject)
+              .then((results) => {
+                res.json(results);
+              })
+              .catch((error) => {
+                console.log(error);
+                res.status(500).json(error);
+              });
+          }
+        });
       }
+  }
+});
+
+app.post('/api/event/create', (req, res) => {
+    // storage for query parameters
+    // TODO verify all these column names
+  const queryObject = {
+    event_title: '',
+    category: null,
+    description: null,
+    featured_flag: false,
+    start_date: null,
+    end_date: null,
+    created_at: '', // TODO insert proper timestamp
+    updated_at: '', // TODO insert proper timestamp
+  };
+    // Execute query
+    for (const key in req.query) { // eslint-disable-line
+      switch (key) {
+        case 'event_title':
+          queryObject[key] = req.query[key];
+          break;
+        case 'category':
+          queryObject[key] = req.query[key];
+          break;
+        case 'description':
+          queryObject[key] = req.query[key];
+          break;
+        case 'start_date':
+          queryObject[key] = req.query[key];
+          break;
+        case 'end_date':
+          queryObject[key] = req.query[key];
+          break;
+        case 'featured_flag':
+          req.checkBody('featured_flag', '"featured_flag" parameter must be in boolean format.').isBoolean(req.query[key]);
+          req.getValidationResult().then((result) => {
+            if (!result) {
+              res.status(400).json({ error: result });
+              // TODO break completely out of the for loop
+            } else {
+              queryObject[key] = req.query[key];
+            }
+          });
+          break;
+        default:
+          res.status(400).json({ error: 'Your query string is malformed. Please refer to API documentation to correct this error.' });
+      }
+      // Execute query
+      knex('music_events')
+        .insert(queryObject)
+        .then((results) => {
+          res.json(results);
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json(error);
+        });
     }
+});
 
-    // req.checkBody(key, `"${key}" parameter must be a string.`).isAlphanumeric(req.query[key]);
-    // req.getValidationResult().then((result) => {
-    //   if (!result) {
-    //     res.status(400).json({ error: result });
-    //     // TODO break completely out of the for loop
-    //   } else {
-    //     queryObject[key] = mysql.escape(req.query[key]);
-    //   }
-    // });
-  })
-  .post((req, res) => {
-    // Filter request params
-    // build SQL query
-    // Add timestamps for created_at or updated_at
-    // execute query
-    // return results
-    res.send('Add a book');
-  })
-  .put((req, res) => {
-    // Filter request params
-    // build SQL query
-    // Add timestamps for created_at or updated_at
-    // execute query
-    // return results
-    res.send('Update the book');
-  })
-  .delete((req, res) => {
-    // Filter request params
-    // build SQL query
-    // execute query
-    // return results
-    res.send('Update the book');
-  });
-
+app.post('/api/event/update');
+app.post('/api/event/delete');

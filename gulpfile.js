@@ -11,13 +11,14 @@ gulp.task('javascript', ['eslint', 'babel']);
 gulp.task('build', ['javascript', 'sass', 'html']);
 
 // Server task
-gulp.task('serve', ['sass', 'javascript'], () => {
+gulp.task('serve', ['sass', 'javascript', 'html'], () => {
   browserSync.init({
     server: './dist',
   });
 
   gulp.watch('public/css/sass/*.scss', ['sass']);
   gulp.watch('public/**/*.js', ['javascript']);
+  gulp.watch('public/**/*.html', ['html']);
   gulp.watch('public/*.html').on('change', browserSync.reload);
 });
 
