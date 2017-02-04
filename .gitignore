@@ -9,6 +9,9 @@ npm-debug.log*
 # JS
 .eslintcache
 
+# Production
+build
+
 #File System
 .DS_Store
 .env
