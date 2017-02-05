@@ -9,7 +9,6 @@
   },
   "scripts": {
     "test": " test/test.js",
-    "dev" : "gulp",
     "start": "node server.js"
   },
   "repository": {
