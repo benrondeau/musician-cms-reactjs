@@ -12,7 +12,7 @@ const knex = require('knex')({ client: 'mysql', connection: process.env.CLEARDB_
 
 // Express Config
 const app = express();
-app.use(express.static('dist')); // serve files from this folder
+app.use(express.static('build')); // serve files from this folder
 app.use(helmet());
 app.use(compression());
 app.use(expressValidator());
