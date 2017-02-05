@@ -1,4 +1,8 @@
 // See setup instructions @ https://www.npmjs.com/package/eslint-config-airbnb-base
 {
-  "extends": "airbnb"
+  "extends": "airbnb",
+  "env": {
+    "browser": true,
+    "node": true
+  }
 }
