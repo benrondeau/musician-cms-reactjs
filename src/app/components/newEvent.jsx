@@ -14,10 +14,12 @@ export default class NewEvent extends React.Component {
   }
   submitEvent(event) {
     event.preventDefault();
+    console.log('submitEvent fired!');
     const apiQueryString = `api/event?${qs.stringify(this.state)}`;
     if (this.state.event_title === undefined) {
       alert('Event title is required!');
     } else {
+      console.log('AXIOS fired!');
       axios.post(apiQueryString)
           .then((response) => {
             alert('Success creating event!');
@@ -85,14 +87,14 @@ export default class NewEvent extends React.Component {
                         htmlFor="start_date" className="col-lg-2 control-label"
                       >Start Date</label>
                       <div className="col-lg-9">
-                        <input type="date" onChange={this.handleChange} className="form-control" id="start_date" />
+                        <input type="date" onChange={this.handleChange} className="form-control" id="start_date" placeholder="YYYY/MM/DD"/>
                       </div>
                     </div>
                     {/* <!--End Date-->*/}
                     <div className="form-group">
                       <label htmlFor="end_date" className="col-lg-2 control-label">End Date</label>
                       <div className="col-lg-9">
-                        <input type="date" onChange={this.handleChange} className="form-control" id="end_date" />
+                        <input type="date" onChange={this.handleChange} className="form-control" id="end_date" placeholder="YYYY/MM/DD"/>
                       </div>
                     </div>
                     {/* <!--Category-->*/}
