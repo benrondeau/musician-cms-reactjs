@@ -15,6 +15,9 @@ var source       = require('vinyl-source-stream');
 var config       = require('../config').browserify;
 var babelify     = require('babelify');
 
+const uglify = require('gulp-uglify');
+const pump = require('pump');
+
 gulp.task('browserify', function(callback) {
 
   var bundleQueue = config.bundleConfigs.length;
@@ -65,6 +68,12 @@ gulp.task('browserify', function(callback) {
       if (bundleQueue) {
         bundleQueue--;
         if (bundleQueue === 0) {
+          // COMPRESS OUTPUT
+          pump([
+            gulp.src('build/app.js'),
+            uglify(),
+            gulp.dest('build'),
+          ]);
           // If queue is empty, tell gulp the task is complete.
           // https://github.com/gulpjs/gulp/blob/master/docs/API.md#accept-a-callback
           callback();

@@ -12,11 +12,10 @@ A web app for tracking music events (concerts, festivals, etc.) using React, Nod
 
 1. Clone repo to your machine.
 2. `cd` into root of repo, run `npm install`
-3. Create `.env` file in root folder and define value for `CLEARDB_DATABASE_URL`, which just needs to be a valid `mysql://` connection to a MySQL
-4. Run `npm start` to boot up server. View server console output for any errors.
+3. Create `.env` file in root folder and define value for `CLEARDB_DATABASE_URL`, which just needs to be a valid `mysql://` connection to a MySQL database.
+4. Run `npm run dev` to boot up the dev server. Check console output for any errors.
 <!-- 5. TODO add info on how to create a dummy DB -->
 
-To run tests: `npm test`
 
 ### API Documentation
 This API only accepts parameters in the HTTP query string format. Example: `?name=bonaroo&category=festival`
