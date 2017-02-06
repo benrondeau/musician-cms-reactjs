@@ -14,7 +14,9 @@ function updateEvents(state = initialState, action) {
       // };
       //
       // Add the new event onto the end of the array
-      const newSingleEvent = state.theBigEventStore.concat([action.event]);
+      const newSingleEvent = {
+        theBigEventStore: state.theBigEventStore.concat([action.event])
+      };
       return newSingleEvent;
     case 'POPULATE_EVENT_LIST':
       // var action = {

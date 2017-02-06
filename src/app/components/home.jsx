@@ -14,28 +14,24 @@ class Home extends React.Component {
   }
 
   componentWillMount() {
-    axios.get('api/event')
-        .then((response) => {
-          store.dispatch({
-            type: 'POPULATE_EVENT_LIST',
-            event: response.data,
+    console.log(this.props.events);
+    if (this.props.events.theBigEventStore.length === 0) {
+      console.log("AJAX call");
+      axios.get('api/event')
+          .then((response) => {
+            store.dispatch({
+              type: 'POPULATE_EVENT_LIST',
+              event: response.data,
+            });
+          })
+          .catch((error) => {
+            alert('Error retrieving events from API. See browser console for details.');
+            console.log(error);
           });
-        })
-        .catch((error) => {
-          alert('Error retrieving events from API. See browser console for details.');
-          console.log(error);
-        });
+    }
   }
 
   render() {
-    // Handle case where the response is not here yet
-    if (!this.props.events.theBigEventStore) {
-      <div>
-        <NavBar />
-        <EventsTable events={[]} />
-      </div>
-    }
-
     return (
       <div>
         <NavBar />

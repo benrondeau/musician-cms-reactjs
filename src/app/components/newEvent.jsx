@@ -2,6 +2,7 @@ import React from 'react';
 import qs from 'qs';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
+import store from '../store';
 
 import NavBar from './navbar.jsx';// eslint-disable-line
 
@@ -13,6 +14,7 @@ export default class NewEvent extends React.Component {
     this.submitEvent = this.submitEvent.bind(this);
     this.state = {};
   }
+
   submitEvent(event) {
     event.preventDefault();
     const apiQueryString = `api/event?${qs.stringify(this.state)}`;
@@ -20,15 +22,19 @@ export default class NewEvent extends React.Component {
       alert('Event title is required!');
     } else {
       axios.post(apiQueryString)
-          .then((response) => {
-            console.log(response);
+          .then((result) => {
+            this.state.id = result.data[0];
+            store.dispatch({
+              type: 'ADD_SINGLE_EVENT',
+              event: this.state,
+            });
             alert('Success creating event!');
             this.setState({}); // clear out old values
             browserHistory.push('/');
           })
           .catch((error) => {
-            alert('Error retrieving events from API. See browser console for details.');
             console.log(error);
+            alert('Error with database! See console for output.');
           });
     }
   }
@@ -88,14 +94,14 @@ export default class NewEvent extends React.Component {
                         htmlFor="start_date" className="col-lg-2 control-label"
                       >Start Date</label>
                       <div className="col-lg-9">
-                        <input type="date" onChange={this.handleChange} className="form-control" id="start_date" placeholder="YYYY/MM/DD"/>
+                        <input type="date" onChange={this.handleChange} className="form-control" id="start_date" placeholder="YYYY/MM/DD" />
                       </div>
                     </div>
                     {/* <!--End Date-->*/}
                     <div className="form-group">
                       <label htmlFor="end_date" className="col-lg-2 control-label">End Date</label>
                       <div className="col-lg-9">
-                        <input type="date" onChange={this.handleChange} className="form-control" id="end_date" placeholder="YYYY/MM/DD"/>
+                        <input type="date" onChange={this.handleChange} className="form-control" id="end_date" placeholder="YYYY/MM/DD" />
                       </div>
                     </div>
                     {/* <!--Category-->*/}
