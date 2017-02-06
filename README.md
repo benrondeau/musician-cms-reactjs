@@ -81,13 +81,12 @@ This API only accepts parameters in the HTTP query string format. Example: `?nam
 
 **Response:** Successful creation returns `Status: 200 OK`
 
-**Required Parameters:** `id`, passed as integer
+**Required Parameters:** `id` (integer) & `event_title` (string).
 
 **Optional Parameters (query string form):**
 
 | Name        | Type         | Description  |
 |:------------- |:-------------|:-----|
-| `event_title` | string | Title of event. |
 | `description` | string | Description of event. |
 | `category` | string | Event's category |
 | `featured_flag` | integer | Must be '0' (false) or '1' (true). |

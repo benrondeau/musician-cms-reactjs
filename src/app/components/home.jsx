@@ -14,9 +14,8 @@ class Home extends React.Component {
   }
 
   componentWillMount() {
-    console.log(this.props.events);
     if (this.props.events.theBigEventStore.length === 0) {
-      console.log("AJAX call");
+      // console.log("AJAX call");
       axios.get('api/event')
           .then((response) => {
             store.dispatch({

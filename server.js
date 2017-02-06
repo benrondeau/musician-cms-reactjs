@@ -179,26 +179,37 @@ app.route('/api/event/:id')
           queryObject[key] = req.query[key];
           break;
         case 'category':
-          req.checkQuery('category', '"category" parameter must not be empty.').notEmpty(req.query[key]);
           queryObject[key] = req.query[key];
           break;
         case 'description':
-          req.checkQuery('description', '"description" parameter must not be empty.').notEmpty(req.query[key]);
           queryObject[key] = req.query[key];
           break;
         case 'start_date':
-          req.checkQuery('start_date', '"start_date" parameter must not be empty.').notEmpty(req.query[key]);
-          req.checkQuery('start_date', '"start_date" parameter must be in ISO8601 date format.').isISO8601(req.query[key]);
-          queryObject[key] = req.query[key];
+          if (req.query[key] === '' || 'null') {
+            queryObject[key] = req.query[key];
+          } else {
+            req.checkQuery('start_date', '"start_date" parameter must be in ISO8601 date format.').isISO8601(req.query[key]);
+            queryObject[key] = req.query[key];
+          }
           break;
         case 'end_date':
-          req.checkQuery('end_date', '"end_date" parameter must not be empty.').notEmpty(req.query[key]);
-          req.checkQuery('end_date', '"end_date" parameter must be in ISO8601 date format.').isISO8601(req.query[key]);
-          queryObject[key] = req.query[key];
+          if (req.query[key] === '' || 'null') {
+            queryObject[key] = req.query[key];
+          } else {
+            req.checkQuery('end_date', '"end_date" parameter must be in ISO8601 date format.').isISO8601(req.query[key]);
+            queryObject[key] = req.query[key];
+          }
           break;
         case 'featured_flag':
-          req.checkQuery('featured_flag', '"featured_flag" parameter must not be empty.').notEmpty(req.query[key]);
-          req.checkQuery('featured_flag', '"featured_flag" parameter must be in integer 0 or 1 format.').isInt().isBoolean(req.query[key]);
+          if (req.query[key] === '' || 'null') {
+            queryObject[key] = req.query[key];
+          } else {
+            req.checkQuery('featured_flag', '"featured_flag" parameter must be in integer 0 or 1 format.').isInt().isBoolean(req.query[key]);
+            queryObject[key] = req.query[key];
+          }
+
+          break;
+        case 'created_at':
           queryObject[key] = req.query[key];
           break;
         default:
