@@ -2,17 +2,18 @@ import React from 'react';
 import qs from 'qs';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
+import { connect } from 'react-redux';
+import store from '../store';
+
 
 import NavBar from './navbar.jsx';// eslint-disable-line
 
-export default class EditEvent extends React.Component {
+class EditEvent extends React.Component {
 
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.updateEvent = this.updateEvent.bind(this);
-    this.state = {};
-    console.log(this.props.params.id); // Get ID in URL
   }
   updateEvent(event) {
     event.preventDefault();
@@ -34,14 +35,17 @@ export default class EditEvent extends React.Component {
 
   deleteEvent(event) {
     event.preventDefault();
-    const apiQueryString = 'api/event/';
+    const apiQueryString = `../api/event/${this.props.params.id}`;
     const answer = confirm('Are you sure?');
     if (answer === true) {
       axios.delete(apiQueryString)
           .then((response) => {
             console.log(response);
             alert('Event Deleted!');
-            // this.setState({}); // clear out old values
+            store.dispatch({
+              type: 'REMOVE_EVENT',
+              event: { id: `${this.props.params.id}` },
+            });
             browserHistory.push('/');
           })
           .catch((error) => {
@@ -76,6 +80,21 @@ export default class EditEvent extends React.Component {
                 <div className="well">
                   <form className="form-horizontal">
                     <fieldset>
+                      {/* <!--Event ID-->*/}
+                      <div className="form-group">
+                        <label
+                            htmlFor="id" className="col-lg-2 control-label"
+                        >Event Title</label>
+                        <div className="col-lg-9">
+                          <input
+                              type="text"
+                              value={this.props.params.id}
+                              className="form-control"
+                              id="id"
+                              disabled
+                          />
+                        </div>
+                      </div>
                       {/* <!--Event Title-->*/}
                       <div className="form-group">
                         <label
@@ -140,8 +159,8 @@ export default class EditEvent extends React.Component {
                       {/* <!--Submit BTN-->*/}
                       <div className="form-group">
                         <div className="col-lg-10 col-lg-offset-2">
-                          <button onClick={this.updateEvent} className="btn btn-primary">Update</button>
-                          <button onClick={this.deleteEvent} className="btn btn-danger">Delete</button>
+                          <button onClick={this.updateEvent.bind(this)} className="btn btn-primary">Update</button>
+                          <button onClick={this.deleteEvent.bind(this)} className="btn btn-danger">Delete</button>
                         </div>
                       </div>
                     </fieldset>
@@ -154,3 +173,11 @@ export default class EditEvent extends React.Component {
     );
   }
 }
+
+const mapStateToProps = function (store) {
+  return {
+    events: store,
+  };
+};
+
+export default connect(mapStateToProps)(EditEvent);

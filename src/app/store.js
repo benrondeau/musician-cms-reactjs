@@ -43,10 +43,10 @@ function updateEvents(state = initialState, action) {
     case 'REMOVE_EVENT':
       // var action = {
       //   type: 'REMOVE_EVENT',
-      //   event: {id: '1', event_title : 'Hey'}
+      //   event: {id: '1'}
       // };
       // Filters through current events and removes the one that matches the id of one passed in.
-      const eventsMinusOne = _.filter(state.theBigEventStore, event => event.id !== action.event.id);
+      const eventsMinusOne = _.filter(state.theBigEventStore, event => event.id != action.event.id);
       return Object.assign({}, state, { theBigEventStore: eventsMinusOne });
     default:
       return state;
