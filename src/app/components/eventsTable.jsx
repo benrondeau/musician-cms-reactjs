@@ -8,12 +8,16 @@ export default class EventsTable extends React.Component {
     this.state = {};
   }
 
+  intToString(int) {
+    return 'true';
+  }
+
   render() {
     const individualEvent = this.props.events.map(event => <tr key={event.id}>
       <td key={event.id}>{event.id}</td>
       <td key={event.event_title}>{event.event_title}</td>
       <td key={event.featured_flag}>{event.featured_flag}</td>
-      <td><Link to={'/event/' + event.id} className="btn btn-success btn-sm">View Event</Link></td>
+      <td><Link to={`/event/${event.id}`} className="btn btn-success btn-sm">View Event</Link></td>
     </tr>);
 
     return (

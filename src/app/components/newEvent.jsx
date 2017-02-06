@@ -1,4 +1,5 @@
 import React from 'react';
+import qs from 'qs';
 import axios from 'axios';
 
 import NavBar from './navbar.jsx';// eslint-disable-line
@@ -7,19 +8,34 @@ export default class NewEvent extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      event: {},
-    };
+    this.handleChange = this.handleChange.bind(this);
+    this.submitEvent = this.submitEvent.bind(this);
+    this.state = {};
   }
-  submitEvent() {
-    axios.post('api/event', {})
-        .then((response) => {
-          this.setState({ events: response.data });
-        })
-        .catch((error) => {
-          alert('Error retrieving events from API. See browser console for details.');
-          console.log(error);
-        });
+  submitEvent(event) {
+    event.preventDefault();
+    const apiQueryString = `api/event?${qs.stringify(this.state)}`;
+    if (this.state.event_title === undefined) {
+      alert('Event title is required!');
+    } else {
+      axios.post(apiQueryString)
+          .then((response) => {
+            alert('Success creating event!');
+            this.setState({}); // clear out old values
+          })
+          .catch((error) => {
+            alert('Error retrieving events from API. See browser console for details.');
+            console.log(error);
+          });
+    }
+  }
+
+  handleChange(event) {
+    const key = event.target.id;
+    const value = event.target.value;
+    this.setState({
+      [key]: value,
+    });
   }
 
   render() {
@@ -44,7 +60,12 @@ export default class NewEvent extends React.Component {
                         htmlFor="event_title" className="col-lg-2 control-label"
                       >Event Title (required)</label>
                       <div className="col-lg-9">
-                        <input type="text" className="form-control" id="event_title"/>
+                        <input
+                          type="text"
+                          onChange={this.handleChange}
+                          className="form-control"
+                          id="event_title"
+                        />
                       </div>
                     </div>
                     {/* <!--Description-->*/}
@@ -54,7 +75,7 @@ export default class NewEvent extends React.Component {
                       >Description</label>
                       <div className="col-lg-9">
                         <textarea
-                          className="form-control" rows="3" id="description"
+                          className="form-control" onChange={this.handleChange}rows="3" id="description"
                         />
                       </div>
                     </div>
@@ -64,14 +85,14 @@ export default class NewEvent extends React.Component {
                         htmlFor="start_date" className="col-lg-2 control-label"
                       >Start Date</label>
                       <div className="col-lg-9">
-                        <input type="date" className="form-control" id="start_date" value="" />
+                        <input type="date" onChange={this.handleChange} className="form-control" id="start_date" />
                       </div>
                     </div>
                     {/* <!--End Date-->*/}
                     <div className="form-group">
                       <label htmlFor="end_date" className="col-lg-2 control-label">End Date</label>
                       <div className="col-lg-9">
-                        <input type="date" className="form-control" id="end_date" value="" />
+                        <input type="date" onChange={this.handleChange} className="form-control" id="end_date" />
                       </div>
                     </div>
                     {/* <!--Category-->*/}
@@ -79,15 +100,16 @@ export default class NewEvent extends React.Component {
                       <label htmlFor="category" className="col-lg-2 control-label">Category</label>
                       <div className="col-lg-9">
                         <input
-                          type="text" className="form-control" id="category" placeholder="Festival"
+                          type="text" className="form-control" onChange={this.handleChange} id="category"
                         />
                       </div>
                     </div>
                     {/* <!--Featured-->*/}
                     <div className="form-group">
-                      <label htmlFor="featured" className="col-lg-2 control-label">Featured?</label>
+                      <label htmlFor="featured_flag" className="col-lg-2 control-label">Featured?</label>
                       <div className="col-lg-9">
-                        <select className="form-control" id="featured">
+                        <select onChange={this.handleChange} className="form-control" id="featured_flag">
+                          <option value="null" />
                           <option value="1">True</option>
                           <option value="0">False</option>
                         </select>
