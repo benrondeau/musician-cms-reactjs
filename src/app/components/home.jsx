@@ -1,28 +1,36 @@
 import React from 'react';
-import axios from 'axios'; // for AJAX with promises
+import axios from 'axios';
 
 // My Components
 import EventsTable from './eventsTable.jsx';// eslint-disable-line
 import NavBar from './navbar.jsx';// eslint-disable-line
 
+export default class Home extends React.Component {
 
-class Home extends React.Component {
-
-  constructor() {
+  constructor(props) {
     super();
-      // AJAX call for data: https://youtu.be/A71aqufiNtQ?t=50m45s
-    axios.get('api/event')
-          .then((response) => {
-            this.state.events = response.data;
-            console.log(this.state);
-          })
-          .catch((error) => {
-            alert('Error retrieving events from API. See browser console for details.');
-            console.log(error);
-          });
     this.state = {
       events: [],
     };
+  }
+
+  componentWillMount() {
+    this.getData();
+  }
+
+  getData() {
+    axios.get('api/event')
+        .then((response) => {
+          this.setState({ events: response.data });
+        })
+        .catch((error) => {
+          alert('Error retrieving events from API. See browser console for details.');
+          console.log(error);
+        });
+  }
+
+  updateEvents(newEvents) {
+    this.setState({ events: newEvents });
   }
 
 
@@ -30,10 +38,11 @@ class Home extends React.Component {
     return (
       <div>
         <NavBar />
-        <EventsTable />
+        <EventsTable
+          events={this.state.events}
+          updateEvents={this.updateEvents.bind(this)}
+        />
       </div>
     );
   }
 }
-
-export default Home;

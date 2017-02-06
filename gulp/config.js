@@ -22,7 +22,7 @@ module.exports = {
     // A separate bundle will be generated for each
     // bundle config in the list below
     bundleConfigs: [{
-      entries: src + '/app/index.jsx',
+      entries: src + '/app/app.jsx',
       dest: dest,
       outputName: 'app.js'
     }],

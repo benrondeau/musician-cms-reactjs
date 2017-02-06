@@ -1,9 +1,21 @@
 import React from 'react';
-import IndividualEvent from './individualEvent.jsx'; // eslint-disable-line
+import { Link } from 'react-router';
 
-class EventsTable extends React.Component {
+export default class EventsTable extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
   render() {
+    const individualEvent = this.props.events.map(event => <tr key={event.id}>
+      <td key={event.id}>{event.id}</td>
+      <td key={event.event_title}>{event.event_title}</td>
+      <td key={event.featured_flag}>{event.featured_flag}</td>
+      <td><Link to="/event/12" className="btn btn-success btn-sm">View Event</Link></td>
+    </tr>);
+
     return (
       <div className="container-fluid">
         <div className="row">
@@ -19,11 +31,11 @@ class EventsTable extends React.Component {
                   <th>ID #</th>
                   <th>Event Title</th>
                   <th>Featured?</th>
-                  <th />
+                  <th>Edit/View</th>
                 </tr>
               </thead>
               <tbody>
-                <IndividualEvent />
+                {individualEvent}
               </tbody>
             </table>
           </div>
@@ -32,5 +44,3 @@ class EventsTable extends React.Component {
     );
   }
 }
-
-export default EventsTable;

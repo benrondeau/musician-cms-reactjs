@@ -4,6 +4,10 @@ import NavBar from './navbar.jsx';// eslint-disable-line
 
 class NewEvent extends React.Component {
 
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     return (
     <div>
