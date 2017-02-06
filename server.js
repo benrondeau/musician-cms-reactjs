@@ -3,6 +3,7 @@ const helmet = require('helmet'); // set security-related HTTP headers
 const compression = require('compression'); // gzip responses, speed things up
 const expressValidator = require('express-validator');
 const mysql = require('mysql'); // eslint-disable-line
+const path = require('path');
 
 if (process.env.CLEARDB_DATABASE_URL === undefined) {
   require('dotenv').config(); // eslint-disable-line
@@ -13,6 +14,9 @@ const knex = require('knex')({ client: 'mysql', connection: process.env.CLEARDB_
 // Express Config
 const app = express();
 app.use(express.static('build')); // serve files from this folder
+app.get(['/', '/event', '/event/:id', '/new'], (request, response) => {
+  response.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+});
 app.use(helmet());
 app.use(compression());
 app.use(expressValidator());

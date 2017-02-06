@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 
 
-class NavBar extends React.Component {
+export default class NavBar extends React.Component {
 
   constructor(props) {
     super(props);
@@ -13,9 +13,9 @@ class NavBar extends React.Component {
       <nav className="navbar navbar-inverse">
         <div className="container-fluid">
           <div className="navbar-header">
-            <a className="navbar-brand">Music Events</a>
+            <Link to="/" className="navbar-brand">Music Events</Link>
           </div>
-          <div className="collapse navbar-collapse">
+          <div className="navbar-collapse">
             <ul className="nav navbar-nav">
               <li><Link to="/">View Events</Link></li>
               <li><Link to="/new">Create Event</Link></li>
@@ -26,5 +26,3 @@ class NavBar extends React.Component {
     );
   }
 }
-
-export default NavBar;
