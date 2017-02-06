@@ -8,10 +8,6 @@ export default class EventsTable extends React.Component {
     this.state = {};
   }
 
-  intToString(int) {
-    return 'true';
-  }
-
   render() {
     const individualEvent = this.props.events.map(event => <tr key={event.id}>
       <td key={event.id}>{event.id}</td>

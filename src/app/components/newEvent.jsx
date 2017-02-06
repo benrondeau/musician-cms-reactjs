@@ -1,6 +1,7 @@
 import React from 'react';
 import qs from 'qs';
 import axios from 'axios';
+import { browserHistory } from 'react-router';
 
 import NavBar from './navbar.jsx';// eslint-disable-line
 
@@ -14,16 +15,16 @@ export default class NewEvent extends React.Component {
   }
   submitEvent(event) {
     event.preventDefault();
-    console.log('submitEvent fired!');
     const apiQueryString = `api/event?${qs.stringify(this.state)}`;
     if (this.state.event_title === undefined) {
       alert('Event title is required!');
     } else {
-      console.log('AXIOS fired!');
       axios.post(apiQueryString)
           .then((response) => {
+            console.log(response);
             alert('Success creating event!');
             this.setState({}); // clear out old values
+            browserHistory.push('/');
           })
           .catch((error) => {
             alert('Error retrieving events from API. See browser console for details.');

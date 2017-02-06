@@ -14,7 +14,7 @@ const knex = require('knex')({ client: 'mysql', connection: process.env.CLEARDB_
 // Express Config
 const app = express();
 app.use(express.static('build')); // serve files from this folder
-app.get(['/', '/event', '/event/:id', '/new'], (request, response) => {
+app.get(['/', '/event/:id', '/new'], (request, response) => {
   response.sendFile(path.resolve(__dirname, 'build', 'index.html'));
 });
 app.use(helmet());
