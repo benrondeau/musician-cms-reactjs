@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "dev": "NODE_ENV=development gulp && node server.js",
+    "dev": "NODE_ENV=development gulp",
     "build": "NODE_ENV=production gulp build"
   },
   "repository": {

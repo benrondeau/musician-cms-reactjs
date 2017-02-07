@@ -18,7 +18,7 @@ export default class NewEvent extends React.Component {
   submitEvent(event) {
     event.preventDefault();
     const apiQueryString = `api/event?${qs.stringify(this.state)}`;
-    if (this.state.event_title === undefined) {
+    if (this.state.event_title === undefined || '') {
       alert('Event title is required!');
     } else {
       axios.post(apiQueryString)
@@ -29,7 +29,6 @@ export default class NewEvent extends React.Component {
               event: this.state,
             });
             alert('Success creating event!');
-            this.setState({}); // clear out old values
             browserHistory.push('/');
           })
           .catch((error) => {
@@ -61,7 +60,7 @@ export default class NewEvent extends React.Component {
           <div className="row">
             <div className="col-md-offset-2 col-md-8">
               <div className="well">
-                <form className="form-horizontal">
+                <form className="form-horizontal" onSubmit={this.submitEvent}>
                   <fieldset>
                     {/* <!--Event Title-->*/}
                     <div className="form-group">
@@ -127,7 +126,7 @@ export default class NewEvent extends React.Component {
                     {/* <!--Submit BTN-->*/}
                     <div className="form-group">
                       <div className="col-lg-10 col-lg-offset-2">
-                        <button onClick={this.submitEvent} className="btn btn-primary">Submit</button>
+                        <button className="btn btn-primary" type="submit">Submit</button>
                       </div>
                     </div>
                   </fieldset>

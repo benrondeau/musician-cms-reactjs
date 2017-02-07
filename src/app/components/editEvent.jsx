@@ -91,6 +91,8 @@ class EditEvent extends React.Component {
       },
     };
 
+    console.log(this.state);
+
     return (
       <div>
         <NavBar />
@@ -153,14 +155,14 @@ class EditEvent extends React.Component {
                         htmlFor="start_date" className="col-lg-2 control-label"
                       >Start Date</label>
                       <div className="col-lg-9">
-                        <input type="date" onChange={this.handleChange} defaultValue={this.state.start_date === null ? '' : this.state.start_date.slice(0, 10)} className="form-control" id="start_date" placeholder="YYYY/MM/DD" />
+                        <input type="date" onChange={this.handleChange} defaultValue={(this.state.start_date === null || this.state.start_date === undefined) ? '' : this.state.start_date.slice(0, 10)} className="form-control" id="start_date" placeholder="YYYY/MM/DD" />
                       </div>
                     </div>
                     {/* <!--End Date-->*/}
                     <div className="form-group">
                       <label htmlFor="end_date" className="col-lg-2 control-label">End Date</label>
                       <div className="col-lg-9">
-                        <input type="date" onChange={this.handleChange} defaultValue={this.state.end_date === null ? '' : this.state.end_date.slice(0, 10)} className="form-control" id="end_date" placeholder="YYYY/MM/DD" />
+                        <input type="date" onChange={this.handleChange} defaultValue={(this.state.end_date === null || this.state.end_date === undefined) ? '' : this.state.end_date.slice(0, 10)} className="form-control" id="end_date" placeholder="YYYY/MM/DD" />
                       </div>
                     </div>
                     {/* <!--Category-->*/}
@@ -186,8 +188,8 @@ class EditEvent extends React.Component {
                     {/* <!--Submit BTN-->*/}
                     <div className="form-group">
                       <div className="col-lg-10 col-lg-offset-2">
-                        <button onClick={this.updateEvent.bind(this)} style={myStyles.updateBTN} className="btn btn-primary">Update</button>
-                        <button onClick={this.deleteEvent.bind(this)} className="btn btn-danger">Delete</button>
+                        <button onClick={this.updateEvent.bind(this)} type="submit" style={myStyles.updateBTN} className="btn btn-primary">Update</button>
+                        <button onClick={this.deleteEvent.bind(this)} type="button" className="btn btn-danger">Delete</button>
                       </div>
                     </div>
                   </fieldset>
