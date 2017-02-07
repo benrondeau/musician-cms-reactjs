@@ -40,9 +40,16 @@ class EditEvent extends React.Component {
       alert('Event title is required!');
     } else {
       axios.put(apiQueryString)
-          .then((response) => {
-            // console.log(response);
+          .then(() => {
+            // Add ID back to object, since it was removed to create query string
+            this.state.id = eventID;
+            // Add to Redux store
+            store.dispatch({
+              type: 'UPDATE_EVENT',
+              event: this.state,
+            });
             alert('Success updating event!');
+            browserHistory.push('/');
           })
           .catch((error) => {
             alert('Error! See browser console for details.');

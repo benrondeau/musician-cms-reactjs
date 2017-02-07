@@ -36,10 +36,14 @@ function updateEvents(state = initialState, action) {
       // };
       //
       // Remove event with the id of the updated event, so it an be replaced.
-      let updateEvent = _.filter(state.theBigEventStore, event => event.id !== action.event.id);
+      const updateEvent = _.filter(state.theBigEventStore, event => event.id !== action.event.id);
       // add the updated event as if it was new
-      updateEvent[action.event.id] = action.event;
-      return updateEvent;
+      updateEvent.push(action.event);
+      // Have to pass an object back to store.
+      const freshArray = {
+        theBigEventStore: updateEvent,
+      };
+      return freshArray;
     case 'REMOVE_EVENT':
       // var action = {
       //   type: 'REMOVE_EVENT',
