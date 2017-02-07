@@ -103,61 +103,67 @@ app.route('/api/event')
       res.status(400).json({ error: 'No "event_title" parameter present. This is required' });
     } else {
     // STEP 2: Add optional each parameter in query string
-    for (const key in req.query) { // eslint-disable-line
-      switch (key) {
-        case 'event_title':
-          req.checkQuery('event_title', '"event_title" parameter must not be empty.').notEmpty(req.query[key]);
-          queryObject[key] = req.query[key];
-          break;
-        case 'category':
-          req.checkQuery('category', '"category" parameter must not be empty.').notEmpty(req.query[key]);
-          queryObject[key] = req.query[key];
-          break;
-        case 'description':
-          req.checkQuery('description', '"description" parameter must not be empty.').notEmpty(req.query[key]);
-          queryObject[key] = req.query[key];
-          break;
-        case 'start_date':
-          req.checkQuery('start_date', '"start_date" parameter must not be empty.').notEmpty(req.query[key]);
-          req.checkQuery('start_date', '"start_date" parameter must be in ISO8601 date format.').isISO8601(req.query[key]);
-          queryObject[key] = req.query[key];
-          break;
-        case 'end_date':
-          req.checkQuery('end_date', '"end_date" parameter must not be empty.').notEmpty(req.query[key]);
-          req.checkQuery('end_date', '"end_date" parameter must be in ISO8601 date format.').isISO8601(req.query[key]);
-          queryObject[key] = req.query[key];
-          break;
-        case 'featured_flag':
-          req.checkQuery('featured_flag', '"featured_flag" parameter must not be empty.').notEmpty(req.query[key]);
-          req.checkQuery('featured_flag', '"featured_flag" parameter must be in integer 0 or 1 format.').isInt().isBoolean(req.query[key]);
-          queryObject[key] = req.query[key];
-          break;
-        default:
-          // Malformed parameter detected!
-          req.checkQuery(key, `"${key}" is not a valid parameter.`).isJSON(req.query[key]);
-      }
-      // STEP 3: Results of validation
-      req.getValidationResult().then((result) => {
-        if (!result.isEmpty()) {
-          res.status(400).json({ error: result.array() });
-        } else {
-          // Execute insert query
-          knex('music_events')
-            .insert(queryObject)
-            .then((results) => {
-              if (results.length === 0) {
-                res.json({ results: 0 });
-              } else {
-                res.json(results);
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-              res.status(500).json(error);
-            });
+      const parseQueryForErrors = new Promise((resolve) => {
+        for (const key in req.query) { // eslint-disable-line
+          switch (key) {
+            case 'event_title':
+              req.checkQuery('event_title', '"event_title" parameter must not be empty.').notEmpty(req.query[key]);
+              queryObject[key] = req.query[key];
+              break;
+            case 'category':
+              req.checkQuery('category', '"category" parameter must not be empty.').notEmpty(req.query[key]);
+              queryObject[key] = req.query[key];
+              break;
+            case 'description':
+              req.checkQuery('description', '"description" parameter must not be empty.').notEmpty(req.query[key]);
+              queryObject[key] = req.query[key];
+              break;
+            case 'start_date':
+              req.checkQuery('start_date', '"start_date" parameter must not be empty.').notEmpty(req.query[key]);
+              req.checkQuery('start_date', '"start_date" parameter must be in ISO8601 date format.').isISO8601(req.query[key]);
+              queryObject[key] = req.query[key];
+              break;
+            case 'end_date':
+              req.checkQuery('end_date', '"end_date" parameter must not be empty.').notEmpty(req.query[key]);
+              req.checkQuery('end_date', '"end_date" parameter must be in ISO8601 date format.').isISO8601(req.query[key]);
+              queryObject[key] = req.query[key];
+              break;
+            case 'featured_flag':
+              req.checkQuery('featured_flag', '"featured_flag" parameter must not be empty.').notEmpty(req.query[key]);
+              req.checkQuery('featured_flag', '"featured_flag" parameter must be in integer 0 or 1 format.').isInt().isBoolean(req.query[key]);
+              queryObject[key] = req.query[key];
+              break;
+            default:
+              // Malformed parameter detected!
+              req.checkQuery(key, `"${key}" is not a valid parameter.`).isJSON(req.query[key]);
+          }
+          resolve();
         }
       });
-    }
+      parseQueryForErrors.then(
+          // STEP 3: Results of validation
+          req.getValidationResult().then((result) => {
+            console.log('FIRED!!');
+            if (!result.isEmpty()) {
+              res.status(400).json({ error: result.array() });
+            } else {
+              // Execute insert query
+              knex('music_events')
+                .insert(queryObject)
+                .then((results) => {
+                  if (results.length === 0) {
+                    res.json({ results: 0 });
+                  } else {
+                    res.json(results);
+                  }
+                })
+                .catch((error) => {
+                  console.log(error);
+                  res.status(500).json(error);
+                });
+            }
+          })
+        )
     }
   });
 
@@ -172,69 +178,73 @@ app.route('/api/event/:id')
       res.status(400).json({ error: 'No "id" parameter present. This is required' });
     } else {
     // STEP 2: Add optional each parameter in query string
-    for (const key in req.query) { // eslint-disable-line
-      switch (key) {
-        case 'event_title':
-          req.checkQuery('event_title', '"event_title" parameter must not be empty.').notEmpty(req.query[key]);
-          queryObject[key] = req.query[key];
-          break;
-        case 'category':
-          queryObject[key] = req.query[key];
-          break;
-        case 'description':
-          queryObject[key] = req.query[key];
-          break;
-        case 'start_date':
-          if (req.query[key] === '' || 'null') {
-            queryObject[key] = req.query[key];
-          } else {
-            req.checkQuery('start_date', '"start_date" parameter must be in ISO8601 date format.').isISO8601(req.query[key]);
-            queryObject[key] = req.query[key];
+      const parseQueryForErrors = new Promise((resolve) => {
+        for (const key in req.query) { // eslint-disable-line
+          switch (key) {
+            case 'event_title':
+              req.checkQuery('event_title', '"event_title" parameter must not be empty.').notEmpty(req.query[key]);
+              queryObject[key] = req.query[key];
+              break;
+            case 'category':
+              queryObject[key] = req.query[key];
+              break;
+            case 'description':
+              queryObject[key] = req.query[key];
+              break;
+            case 'start_date':
+              if (req.query[key] === '' || 'null') {
+                queryObject[key] = req.query[key];
+              } else {
+                req.checkQuery('start_date', '"start_date" parameter must be in ISO8601 date format.').isISO8601(req.query[key]);
+                queryObject[key] = req.query[key];
+              }
+              break;
+            case 'end_date':
+              if (req.query[key] === '' || 'null') {
+                queryObject[key] = req.query[key];
+              } else {
+                req.checkQuery('end_date', '"end_date" parameter must be in ISO8601 date format.').isISO8601(req.query[key]);
+                queryObject[key] = req.query[key];
+              }
+              break;
+            case 'featured_flag':
+              if (req.query[key] === '' || 'null') {
+                queryObject[key] = req.query[key];
+              } else {
+                req.checkQuery('featured_flag', '"featured_flag" parameter must be in integer 0 or 1 format.').isInt().isBoolean(req.query[key]);
+                queryObject[key] = req.query[key];
+              }
+              break;
+            case 'created_at':
+              // Don't load this into the put request. Redundant
+              break;
+            default:
+              // Malformed parameter detected!
+              req.checkQuery(key, `"${key}" is not a valid parameter.`).isJSON(req.query[key]);
           }
-          break;
-        case 'end_date':
-          if (req.query[key] === '' || 'null') {
-            queryObject[key] = req.query[key];
-          } else {
-            req.checkQuery('end_date', '"end_date" parameter must be in ISO8601 date format.').isISO8601(req.query[key]);
-            queryObject[key] = req.query[key];
-          }
-          break;
-        case 'featured_flag':
-          if (req.query[key] === '' || 'null') {
-            queryObject[key] = req.query[key];
-          } else {
-            req.checkQuery('featured_flag', '"featured_flag" parameter must be in integer 0 or 1 format.').isInt().isBoolean(req.query[key]);
-            queryObject[key] = req.query[key];
-          }
-
-          break;
-        case 'created_at':
-          // Don't load this into the put request. Redundant
-          break;
-        default:
-          // Malformed parameter detected!
-          req.checkQuery(key, `"${key}" is not a valid parameter.`).isJSON(req.query[key]);
-      }
-      // STEP 3: Results of validation
-      req.getValidationResult().then((result) => {
-        if (!result.isEmpty()) {
-          res.status(400).json({ error: result.array() });
-        } else {
-          // Execute update query
-          knex('music_events')
-            .where('id', req.params.id)
-            .update(queryObject)
-            .then((results) => {
-              res.json(results);
-            })
-            .catch((error) => {
-              console.log(error);
-              res.status(500).json(error);
-            });
         }
+        resolve();
       });
-    }
+      parseQueryForErrors.then(
+        // STEP 3: Results of validation
+        req.getValidationResult().then((result) => {
+          if (!result.isEmpty()) {
+            res.status(400).json({ error: result.array() });
+          } else {
+            // Execute update query
+            knex('music_events')
+              .where('id', req.params.id)
+              .update(queryObject)
+              .then((results) => {
+                res.json(results);
+              })
+              .catch((error) => {
+                console.log(error);
+                res.status(500).json(error);
+              });
+          }
+        })
+      )
     }
   })
   .delete((req, res) => {

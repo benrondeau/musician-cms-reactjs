@@ -2,6 +2,31 @@
 
 A web app for tracking music events (concerts, festivals, etc.) using React, Node.js and MySQL database.
 
+### Tech Stuff
+- Node.js server running express middleware
+- MySQL for data storage
+- React for rendering UI
+- React Router for handling views
+- Redux for state management
+- Gulp->Browserify->Babel build system
+
+
+### Scripts
+- `npm run dev` = start development server, run gulp build and watch scripts
+- `npm run build` = create build
+
+
+### Directory Structure
+```
+- build (pacakaged files for production use
+- gulp (dev & build scripts)
+- src
+    - app (react app files)
+    - www (html & css files)
+- server.js (Web & API server)
+```
+
+
 ### Local Development
 
 **Requirements:**
@@ -13,9 +38,8 @@ A web app for tracking music events (concerts, festivals, etc.) using React, Nod
 1. Clone repo to your machine.
 2. `cd` into root of repo, run `npm install`
 3. Create `.env` file in root folder and define value for `CLEARDB_DATABASE_URL`, which just needs to be a valid `mysql://` connection to a MySQL database.
-4. Run `npm run dev` to boot up the dev server. Check console output for any errors.
-<!-- 5. TODO add info on how to create a dummy DB -->
-
+4. Run `npm run dev` for build scrips && `node server.js` for API sever. Open browser to `localhost:5000` for API calls to work.
+5. Your database will be empty, so use the API or `/new` route to create some dummy events.
 
 ### API Documentation
 This API only accepts parameters in the HTTP query string format. Example: `?name=bonaroo&category=festival`

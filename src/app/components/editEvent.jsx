@@ -26,13 +26,13 @@ class EditEvent extends React.Component {
     const eventMinusID = new Object(this.state);
     delete eventMinusID.id;
     delete eventMinusID.updated_at;
-    if (eventMinusID.start_date !== null) {
+    if (eventMinusID.start_date !== null && eventMinusID.start_date !== undefined) {
       eventMinusID.start_date = eventMinusID.start_date.slice(0, 10);
     }
-    if (eventMinusID.end_date !== null) {
+    if (eventMinusID.end_date !== null && eventMinusID.end_date !== undefined) {
       eventMinusID.end_date = eventMinusID.end_date.slice(0, 10);
     }
-    if (eventMinusID.created_at !== null) {
+    if (eventMinusID.created_at !== null && eventMinusID.created_at !== undefined) {
       eventMinusID.created_at = eventMinusID.created_at.slice(0, 10);
     }
     const apiQueryString = `../api/event/${eventID}?${qs.stringify(eventMinusID)}`;
@@ -58,7 +58,6 @@ class EditEvent extends React.Component {
     if (answer === true) {
       axios.delete(apiQueryString)
           .then((response) => {
-            console.log(response);
             alert('Event Deleted!');
             store.dispatch({
               type: 'REMOVE_EVENT',
@@ -91,8 +90,6 @@ class EditEvent extends React.Component {
       },
     };
 
-    console.log(this.state);
-
     return (
       <div>
         <NavBar />
@@ -106,7 +103,7 @@ class EditEvent extends React.Component {
           <div className="row">
             <div className="col-md-offset-2 col-md-8">
               <div className="well">
-                <form className="form-horizontal">
+                <form className="form-horizontal" onSubmit={this.submitEvent}>
                   <fieldset>
                     {/* <!--Event ID-->*/}
                     <div className="form-group">
