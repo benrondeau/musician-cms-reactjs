@@ -41,7 +41,8 @@ app.get('/api/event', (req, res) => {
           res.status(500).json(error);
         });
   } else {
-      // STEP 2: Process each parameter in query string
+    // STEP 2: Add optional each parameter in query string
+    const parseQueryForErrors = new Promise((resolve) => {
       for (const key in req.query) { // eslint-disable-line
         switch (key) {
           case 'id':
@@ -65,29 +66,33 @@ app.get('/api/event', (req, res) => {
             // Malformed parameter detected!
             req.checkQuery(key, `"${key}" is not a valid parameter.`).isJSON(req.query[key]);
         }
-        // STEP 3: Results of validation
-        req.getValidationResult().then((result) => {
-          if (!result.isEmpty()) {
-            res.status(400).json({ error: result.array() });
-          } else {
-            // Execute search query
-            knex.select()
-              .from('music_events')
-              .where(queryObject)
-              .then((results) => {
-                if (results.length === 0) {
-                  res.json({ results: 0 });
-                } else {
-                  res.json(results);
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-                res.status(500).json(error);
-              });
-          }
-        });
+        resolve();
       }
+    });
+    parseQueryForErrors.then(
+      // STEP 3: Results of validation
+      req.getValidationResult().then((result) => {
+        if (!result.isEmpty()) {
+          res.status(400).json({ error: result.array() });
+        } else {
+          // Execute search query
+          knex.select()
+            .from('music_events')
+            .where(queryObject)
+            .then((results) => {
+              if (results.length === 0) {
+                res.json({ results: 0 });
+              } else {
+                res.json(results);
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+              res.status(500).json(error);
+            });
+        }
+      })
+    )
   }
 });
 
@@ -143,7 +148,6 @@ app.route('/api/event')
       parseQueryForErrors.then(
           // STEP 3: Results of validation
           req.getValidationResult().then((result) => {
-            console.log('FIRED!!');
             if (!result.isEmpty()) {
               res.status(400).json({ error: result.array() });
             } else {

@@ -2,13 +2,16 @@
 
 A web app for tracking music events (concerts, festivals, etc.) using React, Node.js and MySQL database.
 
-### Tech Stuff
+### Tech Specs
 - Node.js server running express middleware
 - MySQL for data storage
 - React for rendering UI
 - React Router for handling views
 - Redux for state management
 - Gulp->Browserify->Babel build system
+
+### Form Features
+- Simple form validation on front end, complete validation server side
 
 
 ### Scripts
