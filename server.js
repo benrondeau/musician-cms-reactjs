@@ -210,7 +210,7 @@ app.route('/api/event/:id')
 
           break;
         case 'created_at':
-          queryObject[key] = req.query[key];
+          // Don't load this into the put request. Redundant
           break;
         default:
           // Malformed parameter detected!
@@ -226,11 +226,7 @@ app.route('/api/event/:id')
             .where('id', req.params.id)
             .update(queryObject)
             .then((results) => {
-              if (results.length === 0) {
-                res.json({ results: 0 });
-              } else {
-                res.json(results);
-              }
+              res.json(results);
             })
             .catch((error) => {
               console.log(error);
@@ -256,11 +252,7 @@ app.route('/api/event/:id')
             .where('id', req.params.id)
             .del()
             .then((results) => {
-              if (results.length === 0) {
-                res.json({ results: 0 });
-              } else {
-                res.json(results);
-              }
+              res.json(results);
             })
             .catch((error) => {
               console.log(error);

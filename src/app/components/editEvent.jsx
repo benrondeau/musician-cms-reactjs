@@ -13,13 +13,12 @@ class EditEvent extends React.Component {
 
   constructor(props) {
     super(props);
+    // binding 'this'
     this.handleChange = this.handleChange.bind(this);
     this.updateEvent = this.updateEvent.bind(this);
-    const allEvents = this.props.events.theBigEventStore;
-    const singleEvent = parseInt(this.props.params.id);
-    const rawEvent = _.filter(allEvents, _.matches({ id: singleEvent }));
-    const formattedEvent = rawEvent[0];
-    this.state = formattedEvent;
+    // Storing event in state to be used by AJAX call
+    const rawEvent = _.filter(this.props.events.theBigEventStore, _.matches({ id: parseInt(this.props.params.id, 10) }));
+    this.state = rawEvent[0];
   }
   updateEvent(event) {
     event.preventDefault();
@@ -27,7 +26,6 @@ class EditEvent extends React.Component {
     const eventMinusID = new Object(this.state);
     delete eventMinusID.id;
     delete eventMinusID.updated_at;
-    console.log(eventMinusID);
     if (eventMinusID.start_date !== null) {
       eventMinusID.start_date = eventMinusID.start_date.slice(0, 10);
     }
@@ -37,14 +35,13 @@ class EditEvent extends React.Component {
     if (eventMinusID.created_at !== null) {
       eventMinusID.created_at = eventMinusID.created_at.slice(0, 10);
     }
-    console.log(eventMinusID);
     const apiQueryString = `../api/event/${eventID}?${qs.stringify(eventMinusID)}`;
     if (this.state.event_title === undefined) {
       alert('Event title is required!');
     } else {
       axios.put(apiQueryString)
           .then((response) => {
-            console.log(response);
+            // console.log(response);
             alert('Success updating event!');
           })
           .catch((error) => {
@@ -85,6 +82,15 @@ class EditEvent extends React.Component {
   }
 
   render() {
+    const myStyles = {
+      titleText: {
+        marginBottom: '35px',
+      },
+      updateBTN: {
+        marginRight: '15px',
+      },
+    };
+
     return (
       <div>
         <NavBar />
@@ -92,7 +98,7 @@ class EditEvent extends React.Component {
           { /* <!--Heading Text-->*/ }
           <div className="row">
             <div className="col-md-offset-4 col-md-4">
-              <h3 className="text-center">View, Edit or Delete Event</h3>
+              <h3 className="text-center" style={myStyles.titleText}>View, Edit or Delete Event</h3>
             </div>
           </div>
           <div className="row">
@@ -104,30 +110,30 @@ class EditEvent extends React.Component {
                     <div className="form-group">
                       <label
                         htmlFor="id" className="col-lg-2 control-label"
-                      >Event Title</label>
+                      >Event ID (read-only)</label>
                       <div className="col-lg-9">
                         <input
-                            type="text"
-                            value={this.props.params.id}
-                            className="form-control"
-                            id="id"
-                            disabled
-                          />
+                          type="text"
+                          value={this.props.params.id}
+                          className="form-control"
+                          id="id"
+                          disabled
+                        />
                       </div>
                     </div>
                     {/* <!--Event Title-->*/}
                     <div className="form-group">
                       <label
                         htmlFor="event_title" className="col-lg-2 control-label"
-                      >Event Title</label>
+                      >Event Title (required)</label>
                       <div className="col-lg-9">
                         <input
-                            type="text"
-                            onChange={this.handleChange}
-                            className="form-control"
-                            id="event_title"
-                            defaultValue={this.state.event_title}
-                          />
+                          type="text"
+                          onChange={this.handleChange}
+                          className="form-control"
+                          id="event_title"
+                          defaultValue={this.state.event_title}
+                        />
                       </div>
                     </div>
                     {/* <!--Description-->*/}
@@ -137,8 +143,8 @@ class EditEvent extends React.Component {
                       >Description</label>
                       <div className="col-lg-9">
                         <textarea
-                            className="form-control" onChange={this.handleChange} rows="3" id="description"
-                          >{this.state.description}</textarea>
+                          className="form-control" onChange={this.handleChange} rows="3" id="description"
+                        >{this.state.description}</textarea>
                       </div>
                     </div>
                     {/* <!--Start Date-->*/}
@@ -162,8 +168,8 @@ class EditEvent extends React.Component {
                       <label htmlFor="category" className="col-lg-2 control-label">Category</label>
                       <div className="col-lg-9">
                         <input
-                            type="text" className="form-control" defaultValue={this.state.category} onChange={this.handleChange} id="category"
-                          />
+                          type="text" className="form-control" defaultValue={this.state.category} onChange={this.handleChange} id="category"
+                        />
                       </div>
                     </div>
                     {/* <!--Featured-->*/}
@@ -171,16 +177,16 @@ class EditEvent extends React.Component {
                       <label htmlFor="featured_flag" className="col-lg-2 control-label">Featured?</label>
                       <div className="col-lg-9">
                         <select onChange={this.handleChange} className="form-control" id="featured_flag">
-                            <option value="null" />
-                            <option selected="{this.state.featured_flag === 1 ? 'selected' : ''}" value="1">True</option>
-                            <option selected="{this.state.featured_flag === o ? 'selected' : ''}" value="0">False</option>
-                          </select>
+                          <option value="null" />
+                          <option selected={this.state.featured_flag === 1 ? 'selected' : ''} value="1">True</option>
+                          <option selected={this.state.featured_flag === 0 ? 'selected' : ''} value="0">False</option>
+                        </select>
                       </div>
                     </div>
                     {/* <!--Submit BTN-->*/}
                     <div className="form-group">
                       <div className="col-lg-10 col-lg-offset-2">
-                        <button onClick={this.updateEvent.bind(this)} className="btn btn-primary">Update</button>
+                        <button onClick={this.updateEvent.bind(this)} style={myStyles.updateBTN} className="btn btn-primary">Update</button>
                         <button onClick={this.deleteEvent.bind(this)} className="btn btn-danger">Delete</button>
                       </div>
                     </div>

@@ -14,6 +14,7 @@ class Home extends React.Component {
   }
 
   componentWillMount() {
+    // Only make AJAX call when redux store is empty.
     if (this.props.events.theBigEventStore.length === 0) {
       // console.log("AJAX call");
       axios.get('api/event')
